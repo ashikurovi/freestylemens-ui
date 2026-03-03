@@ -735,12 +735,15 @@ export async function createOrder(
 }
 
 /**
- * Auth: forgot password (send reset link to email)
+ * Auth: forgot password (customer - send reset link to email)
  */
 export async function requestPasswordReset(email: string): Promise<{ success: boolean; message: string }> {
     try {
-        const response = await axios.post<ApiResponse<{ success: boolean; message: string }> | { success: boolean; message: string }>(
-            getApiUrl("/auth/forget-password"),
+        const companyId = API_CONFIG.companyId;
+        const response = await axios.post<
+            ApiResponse<{ success: boolean; message: string }> | { success: boolean; message: string }
+        >(
+            getApiUrl(`/users/forgot-password${companyId ? `?companyId=${companyId}` : ""}`),
             { email },
         );
 
@@ -749,7 +752,6 @@ export async function requestPasswordReset(email: string): Promise<{ success: bo
             return (data as ApiResponse<{ success: boolean; message: string }>).data;
         }
 
-        // Backend `forgotPassword` returns { success, message }
         if (data && typeof data === "object" && "success" in data) {
             return data as { success: boolean; message: string };
         }

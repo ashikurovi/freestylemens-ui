@@ -92,8 +92,10 @@ export default function RegisterPage() {
     });
 
     if (res.success) {
-      toast.success("রেজিস্ট্রেশন সফল হয়েছে। লগইন করুন।");
-      router.push("/login?callbackUrl=/my-account/dashboard");
+      toast.success("রেজিস্ট্রেশন সফল হয়েছে।");
+      // AuthContext.register will store token & session if backend returned it,
+      // so we can send the user directly to their dashboard.
+      window.location.href = "/my-account/dashboard";
     } else {
       setError(res.error || "রেজিস্ট্রেশন ব্যর্থ হয়েছে");
     }

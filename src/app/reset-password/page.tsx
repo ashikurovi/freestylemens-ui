@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useMemo, useState } from "react";
 import { FiEye, FiEyeOff, FiLock } from "react-icons/fi";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import { resetPasswordWithToken } from "../../lib/api-services";
 
 function ResetPasswordContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const userId = searchParams.get("id") || "";
   const token = searchParams.get("token") || "";
   const type = (searchParams.get("type") as "customer" | "system" | null) || undefined;
@@ -57,8 +58,10 @@ function ResetPasswordContent() {
 
       if (res.success) {
         toast.success(res.message || "Password reset successful. এখন লগইন করুন।");
-        setPassword("");
-        setConfirmPassword("");
+        // ছোট্ট ডিলে দিয়ে লগইন পেইজে পাঠানো হবে
+        setTimeout(() => {
+          router.push("/login");
+        }, 800);
       } else {
         toast.error(res.message || "Password reset failed. আবার চেষ্টা করুন।");
       }

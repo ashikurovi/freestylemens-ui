@@ -103,8 +103,9 @@ export default function RegisterPage() {
   };
   return (
     <div className="min-h-screen relative bg-gradient-to-br from-white to-primary/5">
-      <div className="max-w-7xl mx-auto px-5 py-8 min-h-screen flex items-center justify-center">
-        <div className=" w-auto mx-auto rounded-2xl bg-white shadow-md border border-gray-100 overflow-hidden">
+      <div className=" px-5 py-8 min-h-screen flex items-center justify-center">
+
+        <div className=" w-[500px] mx-auto rounded-2xl bg-white shadow-md border border-gray-100 overflow-hidden">
           <div className="px-6 pt-6 text-center">
             <div className="inline-block mb-3">
               <span className="text-xs font-bold tracking-widest text-white px-4 py-2 rounded-full bg-primary">
@@ -216,6 +217,7 @@ export default function RegisterPage() {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );

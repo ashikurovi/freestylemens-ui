@@ -80,11 +80,8 @@ export default function RegisterPage() {
 
     if (res.success) {
       toast.success("রেজিস্ট্রেশন সফল হয়েছে। লগইন করুন।");
-      router.push(
-        `/login?callbackUrl=${encodeURIComponent(
-          "/my-account/dashboard" || pathname || "/",
-        )}`,
-      );
+      const callbackUrl = "/my-account/dashboard" || pathname || "/";
+      router.push(`/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
     } else {
       setError(res.error || "রেজিস্ট্রেশন ব্যর্থ হয়েছে");
     }

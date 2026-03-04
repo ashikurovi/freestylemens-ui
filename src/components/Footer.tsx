@@ -1,6 +1,5 @@
 "use client";
 
-import Logo from "../../public/images/logo.png";
 import PaymentGateway from "../../public/images/payment-gateway.webp";
 import { useAuth } from "../context/AuthContext";
 import { API_CONFIG } from "../lib/api-config";
@@ -23,6 +22,9 @@ const Footer = () => {
   const { userSession } = useAuth();
   const [companyInfo, setCompanyInfo] = useState<SystemUser | null>(null);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [isCompanyLoading, setIsCompanyLoading] = useState(true);
+  const [isCategoriesLoading, setIsCategoriesLoading] = useState(true);
+  // const [imageLoaded, setImageLoaded] = useState(false);
 
   const companyId = useMemo(
     () => userSession?.companyId || API_CONFIG.companyId,
@@ -32,10 +34,23 @@ const Footer = () => {
   useEffect(() => {
     let mounted = true;
     const loadCompanyInfo = async () => {
-      if (!companyId) return;
-      const data = await getSystemUserByCompanyId(companyId);
-      if (mounted && data) {
-        setCompanyInfo(data);
+      if (!companyId) {
+        if (mounted) setIsCompanyLoading(false);
+        return;
+      }
+
+      if (mounted) {
+        setIsCompanyLoading(true);
+        setCompanyInfo(null);
+      }
+
+      try {
+        const data = await getSystemUserByCompanyId(companyId);
+        if (mounted) {
+          setCompanyInfo(data ?? null);
+        }
+      } finally {
+        if (mounted) setIsCompanyLoading(false);
       }
     };
     loadCompanyInfo();
@@ -47,9 +62,23 @@ const Footer = () => {
   useEffect(() => {
     let mounted = true;
     const loadCategories = async () => {
-      const data = await getCategories(companyId);
-      if (mounted && Array.isArray(data) && data.length) {
-        setCategories(data);
+      if (!companyId) {
+        if (mounted) setIsCategoriesLoading(false);
+        return;
+      }
+
+      if (mounted) {
+        setIsCategoriesLoading(true);
+        setCategories([]);
+      }
+
+      try {
+        const data = await getCategories(companyId);
+        if (mounted && Array.isArray(data) && data.length) {
+          setCategories(data);
+        }
+      } finally {
+        if (mounted) setIsCategoriesLoading(false);
       }
     };
     loadCategories();
@@ -58,12 +87,11 @@ const Footer = () => {
     };
   }, [companyId]);
 
-  const companyName = companyInfo?.companyName || "চিত্রকর্ম";
-  const branchLocation =
-    companyInfo?.branchLocation || "স্টেশন রোড, শাপলা চত্তর, রংপুর।";
-  const phone = companyInfo?.phone || "(+৮৮) ০১৭৭৪৬১৭৪৫২";
-  const email = companyInfo?.email || "skshobuj9988@gmail.com";
-  const logoSrc = companyInfo?.companyLogo;
+  const companyName = companyInfo?.companyName || "";
+  const branchLocation = companyInfo?.branchLocation || "।";
+  const phone = companyInfo?.phone || "";
+  const email = companyInfo?.email || "";
+  // const logoSrc = companyInfo?.companyLogo;
   const fallbackCategories = [
     { name: "ওয়ালবোর্ড", slug: "wallboard" },
     { name: "ক্যানভাস প্রিন্ট", slug: "canvas-print" },
@@ -76,19 +104,48 @@ const Footer = () => {
     { name: "আনুষাঙ্গিক", slug: "accessories" },
     { name: "কাস্টম পণ্য", slug: "custom-products" },
   ];
+  const isLoading = isCompanyLoading || isCategoriesLoading;
   const visibleCategories = categories.length ? categories : fallbackCategories;
+
+  if (isLoading) {
+    return (
+      <footer className=" bg-black">
+        <div className=" max-w-7xl mx-auto py-16 px-5 flex items-center justify-center">
+          <div
+            className="w-7 h-7 border-2 border-gray-500/30 border-t-white rounded-full animate-spin"
+            role="status"
+            aria-label="Loading"
+          />
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className=" bg-black">
       <div className=" max-w-7xl mx-auto py-16 px-5 flex min-[910px]:flex-row flex-col gap-5">
         <div className=" flex flex-col gap-3 min-[910px]:flex-[0_0_30%] ">
-          <Link href="/">
-            {logoSrc ? (
-              <Image src={logoSrc} alt="logo" width={80} height={60} unoptimized />
-            ) : (
-             ""
-            )}
-          </Link>
+          {/* <Link href="/">
+            <div className="relative min-w-[80px] min-h-[60px] flex items-center justify-center">
+              {(!companyInfo || (logoSrc && !imageLoaded)) && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-gray-500/30 border-t-white rounded-full animate-spin" />
+                </div>
+              )}
+              {logoSrc && (
+                <Image
+                  src={logoSrc}
+                  alt="logo"
+                  width={80}
+                  height={60}
+                  unoptimized
+                  className={`transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+                  onLoad={() => setImageLoaded(true)}
+                />
+              )}
+            </div>
+          </Link> */}
+
           <p className=" text-[#ffffffe6]">
             <strong>{companyName}</strong>– আপনার লাইফস্টাইলের জন্য নির্ভরযোগ্য
             ইকমার্স। আমরা সরবরাহ করি মানসম্পন্ন লাইফস্টাইল পণ্য, দ্রুত ডেলিভারি
@@ -111,10 +168,6 @@ const Footer = () => {
             >
               <FaFacebookF />
             </Link>
-        
-     
-         
-           
           </div>
         </div>
         <div className=" grid grid-cols-[repeat(auto-fit,_minmax(140px,_1fr))] w-full gap-2">
@@ -125,7 +178,7 @@ const Footer = () => {
                 <Link
                   key={category.slug}
                   href={`/products?category=${category.slug}`}
-                  className=" hover:text-primary transition-all ease-linear duration-150"
+                  className="  transition-all ease-linear duration-150"
                 >
                   {category.name}
                 </Link>
@@ -137,13 +190,13 @@ const Footer = () => {
             <ul className=" text-[#ffffffe6] flex flex-col gap-1">
               <Link
                 href="/"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 হোম
               </Link>
               <Link
                 href="/"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 সংগ্রহ
               </Link>
@@ -155,13 +208,13 @@ const Footer = () => {
               </Link> */}
               <Link
                 href="/"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 অফার
               </Link>
               <Link
                 href="/"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 অনুসন্ধান
               </Link>
@@ -172,19 +225,19 @@ const Footer = () => {
             <ul className=" text-[#ffffffe6] flex flex-col gap-1">
               <Link
                 href="/my-account/dashboard"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 আমার অ্যাকাউন্ট
               </Link>
               <Link
                 href="/my-account/orders"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 আমার অর্ডার
               </Link>
               <Link
                 href="/view-cart"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 ইচ্ছার তালিকা
               </Link>
@@ -196,7 +249,7 @@ const Footer = () => {
               </Link> */}
               <Link
                 href="/"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 আমাদের সাথে যোগাযোগ করুন
               </Link>
@@ -209,19 +262,19 @@ const Footer = () => {
             <ul className=" text-[#ffffffe6] flex flex-col gap-1">
               <Link
                 href="/terms"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 টার্মস এবং কন্ডিশন
               </Link>
               <Link
                 href="/privacy-policy"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 প্রাইভেসি পলিসি
               </Link>
               <Link
                 href="/refund-and-return-policy"
-                className=" hover:text-primary transition-all ease-linear duration-150"
+                className="  transition-all ease-linear duration-150"
               >
                 রিফান্ড এবং রিটার্ন পলিসি
               </Link>
@@ -252,7 +305,8 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-5 sm:py-4 py-3 flex items-center justify-between gap-2 min-[700px]:flex-row flex-col">
           <div>
             <p className="text-[#ffffffe6] text-[15px]">
-              কপিরাইট © {new Date().getFullYear()} {companyName} সর্বস্বত্ব সংরক্ষিত
+              কপিরাইট © {new Date().getFullYear()} {companyName} সর্বস্বত্ব
+              সংরক্ষিত
             </p>
           </div>
           <div>

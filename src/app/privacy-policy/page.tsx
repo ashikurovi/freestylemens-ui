@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { getPrivacyPolicies } from "@/lib/api-services";
 import type { PolicyPage } from "@/types/policy";
+import ScrollAnimation from "@/components/shared/ScrollAnimation";
 
 const faqs = [
   {
@@ -57,26 +58,29 @@ const PrivacyPolicyPage = () => {
 
   return (
     <main className="max-w-5xl mx-auto px-5 py-10 space-y-10">
-      <header className="space-y-3 text-center md:text-left">
-        <span className="inline-block text-xs font-bold tracking-widest text-white px-4 py-2 rounded-full bg-primary mb-2">
-          প্রাইভেসি ও সিকিউরিটি
-        </span>
-        <h1 className="text-2xl md:text-3xl font-semibold text-primary">
-          প্রাইভেসি পলিসি ও ডেটা সিকিউরিটি
-        </h1>
-        <p className="text-sm md:text-base text-gray-600 max-w-2xl">
-          আপনার ব্যক্তিগত তথ্য, অর্ডার ডেটা এবং পেমেন্ট ইনফরমেশন আমাদের কাছে
-          সর্বোচ্চ অগ্রাধিকার পায়। নিচে কিভাবে আমরা আপনার ডেটা সংগ্রহ, ব্যবহার
-          এবং সুরক্ষিত রাখি তা বিস্তারিত দেওয়া হলো।
-        </p>
-      </header>
+      <ScrollAnimation>
+        <header className="space-y-3 text-center md:text-left">
+          <span className="inline-block text-xs font-bold tracking-widest text-white px-4 py-2 rounded-full bg-primary mb-2">
+            প্রাইভেসি ও সিকিউরিটি
+          </span>
+          <h1 className="text-2xl md:text-3xl font-semibold text-primary">
+            প্রাইভেসি পলিসি ও ডেটা সিকিউরিটি
+          </h1>
+          <p className="text-sm md:text-base text-gray-600 max-w-2xl">
+            আপনার ব্যক্তিগত তথ্য, অর্ডার ডেটা এবং পেমেন্ট ইনফরমেশন আমাদের কাছে
+            সর্বোচ্চ অগ্রাধিকার পায়। নিচে কিভাবে আমরা আপনার ডেটা সংগ্রহ, ব্যবহার
+            এবং সুরক্ষিত রাখি তা বিস্তারিত দেওয়া হলো।
+          </p>
+        </header>
+      </ScrollAnimation>
 
-      <section className="rounded-2xl bg-white border border-gray-200 px-6 py-8 md:px-8 md:py-9 shadow-sm space-y-8 text-gray-800">
-        {isLoading && !policyContent && (
-          <p className="text-sm text-gray-500">প্রাইভেসি পলিসি লোড হচ্ছে...</p>
-        )}
+      <ScrollAnimation delay={0.1}>
+        <section className="rounded-2xl bg-white border border-gray-200 px-6 py-8 md:px-8 md:py-9 shadow-sm space-y-8 text-gray-800">
+          {isLoading && !policyContent && (
+            <p className="text-sm text-gray-500">প্রাইভেসি পলিসি লোড হচ্ছে...</p>
+          )}
 
-        {policyContent ? (
+          {policyContent ? (
           <article
             className="prose max-w-none prose-sm sm:prose-base text-gray-800"
             dangerouslySetInnerHTML={{ __html: policyContent }}
@@ -279,7 +283,9 @@ const PrivacyPolicyPage = () => {
           </article>
         )}
       </section>
+      </ScrollAnimation>
 
+      <ScrollAnimation delay={0.2}>
       <section className="space-y-5">
         <div>
           <h2 className="text-lg md:text-xl font-semibold text-gray-900">
@@ -314,7 +320,9 @@ const PrivacyPolicyPage = () => {
           ))}
         </div>
       </section>
+      </ScrollAnimation>
 
+      <ScrollAnimation delay={0.3}>
       <section className="flex flex-col md:flex-row items-center justify-between gap-4 pt-2 border-t border-gray-100">
         <p className="text-sm text-gray-700 text-center md:text-left">
           আপনার প্রাইভেসি বা ডেটা সিকিউরিটি নিয়ে আরও প্রশ্ন থাকলে আমাদের টিমের
@@ -335,6 +343,7 @@ const PrivacyPolicyPage = () => {
           </a>
         </div>
       </section>
+      </ScrollAnimation>
     </main>
   );
 };

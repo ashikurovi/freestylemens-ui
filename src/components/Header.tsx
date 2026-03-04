@@ -10,7 +10,6 @@ import { cn } from "../utils/cn";
 import ProfileDropDown from "./drop down/PrfofileDropDown";
 import CartDrawer from "./shopping cart/CartDrawer";
 import { useAuth } from "../context/AuthContext";
-import { MdLogout } from "react-icons/md";
 import { Button, Modal } from "antd";
 import { API_CONFIG } from "../lib/api-config";
 import { getSystemUserByCompanyId } from "../lib/api-services";
@@ -272,26 +271,9 @@ const Header = () => {
             </>
           )}
           {isAuthenticated && (
-            <>
-              <Link
-                onClick={() => setToggle(!toggle)}
-                href="/my-account"
-                className=" text-lg font-medium px-5 py-2 hover:text-primary transition-all ease-linear duration-200 hover:bg-primary/5"
-              >
-                আমার অ্যাকাউন্ট
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  setToggle(!toggle);
-                  setLogoutModalOpen(true);
-                }}
-                className=" w-full text-left text-lg font-medium px-5 py-2 text-gray-700 hover:bg-gray-100 transition-all ease-linear duration-200 flex items-center gap-2"
-              >
-                <MdLogout size={20} />
-                লগআউট
-              </button>
-            </>
+            <div className="px-5 py-2">
+              <ProfileDropDown onMenuAction={() => setToggle(false)} />
+            </div>
           )}
         </ul>
       </div>

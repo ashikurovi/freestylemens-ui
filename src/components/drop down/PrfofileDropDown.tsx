@@ -14,7 +14,11 @@ import {
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
-const ProfileDropDown: React.FC = () => {
+interface ProfileDropDownProps {
+  onMenuAction?: () => void;
+}
+
+const ProfileDropDown: React.FC<ProfileDropDownProps> = ({ onMenuAction }) => {
   const { userSession, logout } = useAuth();
   const router = useRouter();
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
@@ -172,21 +176,27 @@ const ProfileDropDown: React.FC = () => {
     switch (key) {
       case "login":
         router.push("/login");
+        onMenuAction?.();
         break;
       case "register":
         router.push("/register");
+        onMenuAction?.();
         break;
       case "2":
         router.push("/my-account/dashboard");
+        onMenuAction?.();
         break;
       case "3":
         router.push("/my-account/orders");
+        onMenuAction?.();
         break;
       case "4":
         router.push("/my-account/address");
+        onMenuAction?.();
         break;
       case "5":
         router.push("/my-account/wishlist");
+        onMenuAction?.();
         break;
       case "6":
         // router.push("/my-account/settings");
@@ -202,6 +212,7 @@ const ProfileDropDown: React.FC = () => {
   const handleConfirmLogout = () => {
     logout();
     setLogoutModalOpen(false);
+    onMenuAction?.();
   };
 
   return (

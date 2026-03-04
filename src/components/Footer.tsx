@@ -86,7 +86,7 @@ const Footer = () => {
             {logoSrc ? (
               <Image src={logoSrc} alt="logo" width={80} height={60} unoptimized />
             ) : (
-              <Image src={Logo} alt="logo" width={120} />
+             ""
             )}
           </Link>
           <p className=" text-[#ffffffe6]">
@@ -252,7 +252,7 @@ const Footer = () => {
         <div className="max-w-7xl mx-auto px-5 sm:py-4 py-3 flex items-center justify-between gap-2 min-[700px]:flex-row flex-col">
           <div>
             <p className="text-[#ffffffe6] text-[15px]">
-              কপিরাইট © {new Date().getFullYear()} চিত্রকর্ম সর্বস্বত্ব সংরক্ষিত
+              কপিরাইট © {new Date().getFullYear()} {companyName} সর্বস্বত্ব সংরক্ষিত
             </p>
           </div>
           <div>

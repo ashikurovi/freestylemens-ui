@@ -272,8 +272,12 @@ const ProductsBody = () => {
   return (
     <section className="w-full flex flex-col gap-8">
       <div className="grid w-full grid-cols-[repeat(auto-fit,_minmax(160px,_1fr))] sm:grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-4 sm:gap-5 lg:gap-6">
-        {products.map((product) => (
-          <div key={product.SKU || product.documentId} className="h-full">
+        {products.map((product, index) => (
+          <div
+            key={product.SKU || product.documentId}
+            className="h-full animate__animated animate__fadeInUp"
+            style={{ animationDelay: `${index * 0.05}s` }}
+          >
             <ProductCard product={product} />
           </div>
         ))}

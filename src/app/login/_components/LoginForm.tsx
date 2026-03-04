@@ -6,6 +6,7 @@ import { Suspense, useMemo, useState } from "react";
 import { FiEye, FiEyeOff, FiLock, FiMail } from "react-icons/fi";
 import styled from "styled-components";
 import { useAuth } from "../../../context/AuthContext";
+import toast from "react-hot-toast";
 
 const Input = styled.input`
   padding: 10px;
@@ -18,7 +19,6 @@ const Input = styled.input`
 export default function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
@@ -31,16 +31,15 @@ export default function LoginForm() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     setLoading(true);
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setError("অনুগ্রহ করে সঠিক ইমেইল লিখুন");
+      toast.error("অনুগ্রহ করে সঠিক ইমেইল লিখুন");
       setLoading(false);
       return;
     }
     if (!password || password.length < 6) {
-      setError("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে");
+      toast.error("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে");
       setLoading(false);
       return;
     }
@@ -48,7 +47,11 @@ export default function LoginForm() {
     const result = await login(email, password);
 
     if (!result.success) {
-      setError(result.error || "ইমেইল বা পাসওয়ার্ড সঠিক নয়");
+      const errorMessage =
+        result.error === "Invalid credentials"
+          ? "ইমেইল বা পাসওয়ার্ড সঠিক নয়"
+          : result.error || "ইমেইল বা পাসওয়ার্ড সঠিক নয়";
+      toast.error(errorMessage);
       setLoading(false);
     } else {
       // Full page redirect ensures cookie is sent with request so middleware allows access
@@ -77,11 +80,6 @@ export default function LoginForm() {
             </div>
 
             <div className="p-6 border-t border-gray-100">
-              {error && (
-                <div className="mb-3 text-sm text-gray-700 bg-gray-100 border border-gray-300 rounded px-3 py-2">
-                  {error}
-                </div>
-              )}
               <form onSubmit={handleLogin} className="flex flex-col gap-4">
                 <div className="relative">
                   <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">

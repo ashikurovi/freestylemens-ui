@@ -12,7 +12,7 @@ const Category = async () => {
   try {
     categories = await getCategories(API_CONFIG.companyId);
   } catch (error) {
-    console.error("Failed to load categories:", error);
+    // console.error("Failed to load categories:", error);
     // categories will remain empty array
   }
 

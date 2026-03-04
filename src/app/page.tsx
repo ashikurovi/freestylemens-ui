@@ -22,7 +22,7 @@ export default function Home() {
         <TopProduct />
         <FlashSale />
         <ForYou />
-        <FeatureSection />
+        {/* <FeatureSection /> */}
       </main>
     </Suspense>
   );

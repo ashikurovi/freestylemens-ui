@@ -18,10 +18,10 @@ const ProfileDropDown: React.FC = () => {
   const { userSession, logout } = useAuth();
   const router = useRouter();
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
+  const isAuthenticated = Boolean(userSession?.accessToken);
 
-  const userName = userSession?.user?.name || "Guest user";
-  const userEmail = (userSession as { user?: { email?: string } } | undefined)
-    ?.user?.email;
+  const userName = userSession?.user?.name || userSession?.name || "Guest user";
+  const userEmail = userSession?.user?.email || userSession?.email;
   const initials =
     userName
       .split(" ")
@@ -31,64 +31,151 @@ const ProfileDropDown: React.FC = () => {
       .slice(0, 2)
       .toUpperCase() || "U";
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: (
-        <div className="flex items-center gap-3 px-1 py-1.5">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-xs font-semibold text-white">
-            {initials}
-          </div>
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">
-              {userName}
-            </p>
-            {userEmail && (
-              <p className="text-xs text-gray-500 truncate">{userEmail}</p>
-            )}
-          </div>
-        </div>
-      ),
-      disabled: true,
-    },
-    {
-      type: "divider",
-    },
-    {
-      key: "2",
-      icon: <MdOutlineManageAccounts size={20} />,
-      label: "Manage Account",
-    },
-    {
-      key: "3",
-      icon: <IoCartOutline size={20} />,
-      label: "My Orders",
-    },
-    {
-      key: "4",
-      icon: <IoLocationOutline size={20} />,
-      label: "Address",
-    },
-    {
-      key: "5",
-      icon: <IoHeartOutline size={20} />,
-      label: "Wishlist",
-    },
-    {
-      key: "6",
-      icon: <IoSettingsOutline size={20} />,
-      label: "Settings",
-    },
-    {
-      key: "7",
-      icon: <IoLogInOutline size={20} style={{ color: "#404040" }} />,
-      label: "Log out",
-      danger: true,
-    },
-  ];
+  const items: MenuProps["items"] = isAuthenticated
+    ? [
+        {
+          key: "1",
+          label: (
+            <div className="flex items-center gap-3 px-2 py-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-gray-800 to-gray-950 text-xs font-bold text-white shadow-sm ring-2 ring-gray-100">
+                {initials}
+              </div>
+              <div className="min-w-0 flex flex-col">
+                <p className="text-[13px] font-semibold text-gray-900 truncate leading-tight">
+                  {userName}
+                </p>
+                {userEmail && (
+                  <p className="text-[11px] text-gray-400 truncate leading-tight mt-0.5">
+                    {userEmail}
+                  </p>
+                )}
+              </div>
+            </div>
+          ),
+          disabled: true,
+        },
+        {
+          type: "divider",
+        },
+        {
+          key: "2",
+          icon: (
+            <span className="flex items-center justify-center w-[18px] text-gray-400">
+              <MdOutlineManageAccounts size={17} />
+            </span>
+          ),
+          label: (
+            <span className="text-[13px] font-medium text-gray-700">
+              Manage Account
+            </span>
+          ),
+        },
+        {
+          key: "3",
+          icon: (
+            <span className="flex items-center justify-center w-[18px] text-gray-400">
+              <IoCartOutline size={16} />
+            </span>
+          ),
+          label: (
+            <span className="text-[13px] font-medium text-gray-700">
+              My Orders
+            </span>
+          ),
+        },
+        {
+          key: "4",
+          icon: (
+            <span className="flex items-center justify-center w-[18px] text-gray-400">
+              <IoLocationOutline size={16} />
+            </span>
+          ),
+          label: (
+            <span className="text-[13px] font-medium text-gray-700">
+              Address
+            </span>
+          ),
+        },
+        {
+          key: "5",
+          icon: (
+            <span className="flex items-center justify-center w-[18px] text-gray-400">
+              <IoHeartOutline size={16} />
+            </span>
+          ),
+          label: (
+            <span className="text-[13px] font-medium text-gray-700">
+              Wishlist
+            </span>
+          ),
+        },
+        // {
+        //   key: "6",
+        //   icon: (
+        //     <span className="flex items-center justify-center w-[18px] text-gray-400">
+        //       <IoSettingsOutline size={16} />
+        //     </span>
+        //   ),
+        //   label: (
+        //     <span className="text-[13px] font-medium text-gray-700">
+        //       Settings
+        //     </span>
+        //   ),
+        // },
+        {
+          type: "divider",
+        },
+        {
+          key: "7",
+          className: "group hover:!bg-red-500",
+          icon: (
+            <span className="flex items-center justify-center w-[18px] text-red-400 group-hover:!text-white">
+              <IoLogInOutline size={16} />
+            </span>
+          ),
+          label: (
+            <span className="text-[13px] font-medium text-red-500 group-hover:!text-white">
+              Log out
+            </span>
+          ),
+          danger: true,
+        },
+      ]
+    : [
+        {
+          key: "login",
+          icon: (
+            <span className="flex items-center justify-center w-[18px] text-gray-400">
+              <IoLogInOutline size={16} />
+            </span>
+          ),
+          label: (
+            <span className="text-[13px] font-medium text-gray-700">Login</span>
+          ),
+        },
+        {
+          key: "register",
+          icon: (
+            <span className="flex items-center justify-center w-[18px] text-gray-400">
+              <FaRegUser size={14} />
+            </span>
+          ),
+          label: (
+            <span className="text-[13px] font-medium text-gray-700">
+              Register
+            </span>
+          ),
+        },
+      ];
 
   const handleMenuClick = ({ key }: { key: string }) => {
     switch (key) {
+      case "login":
+        router.push("/login");
+        break;
+      case "register":
+        router.push("/register");
+        break;
       case "2":
         router.push("/my-account/dashboard");
         break;
@@ -102,7 +189,7 @@ const ProfileDropDown: React.FC = () => {
         router.push("/my-account/wishlist");
         break;
       case "6":
-        router.push("/my-account/settings");
+        // router.push("/my-account/settings");
         break;
       case "7":
         setLogoutModalOpen(true);
@@ -119,49 +206,86 @@ const ProfileDropDown: React.FC = () => {
 
   return (
     <>
-    <Dropdown
-      menu={{
-        items,
-        onClick: handleMenuClick,
-        className:
-          "rounded-2xl border border-gray-200 bg-white px-1 py-1 shadow-lg",
-      }}
-      placement="bottomRight"
-      trigger={["click"]}
-      overlayStyle={{
-        marginTop: "14px",
-        minWidth: "220px",
-        maxWidth: "260px",
-      }}
-    >
-      <button
-        type="button"
-        className="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs md:text-sm text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-colors duration-200 ease-linear"
+      <Dropdown
+        menu={{
+          items,
+          onClick: handleMenuClick,
+          className: "!p-1.5",
+          style: {
+            borderRadius: "14px",
+            border: "1px solid #f0f0f0",
+            boxShadow:
+              "0 4px 6px -1px rgba(0,0,0,0.06), 0 10px 24px -4px rgba(0,0,0,0.08)",
+            padding: "6px",
+            minWidth: "220px",
+            maxWidth: "256px",
+            backgroundColor: "#ffffff",
+          },
+        }}
+        placement="bottomRight"
+        trigger={["click"]}
+        overlayStyle={{
+          marginTop: "10px",
+        }}
       >
-        <div className="flex h-7 w-7 items-center justify-center rounded-full bg-black text-[11px] font-semibold text-white">
-          {initials || <FaRegUser size={14} />}
-        </div>
-        <span className="hidden md:inline-block max-w-[120px] truncate">
-          {userName}
-        </span>
-      </button>
-    </Dropdown>
+        <button
+          type="button"
+          className="group flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1.5 text-sm text-gray-700 hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm transition-all duration-200"
+        >
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-gray-800 to-gray-950 text-[11px] font-bold text-white shadow-sm">
+            {isAuthenticated ? initials : <FaRegUser size={13} />}
+          </div>
+          <span className="hidden md:inline-block max-w-[110px] truncate text-[13px] font-medium">
+            {isAuthenticated ? userName : "Account"}
+          </span>
+          <svg
+            className="hidden md:block w-3 h-3 text-gray-400 group-hover:text-gray-600 transition-colors"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+      </Dropdown>
 
-    <Modal
-      title="Log Out"
-      open={logoutModalOpen}
-      onCancel={() => setLogoutModalOpen(false)}
-      footer={[
-        <Button key="cancel" onClick={() => setLogoutModalOpen(false)}>
-          Cancel
-        </Button>,
-        <Button key="confirm" type="primary" danger onClick={handleConfirmLogout}>
-          Yes, Log Out
-        </Button>,
-      ]}
-    >
-      <p>Are you sure you want to log out?</p>
-    </Modal>
+      <Modal
+        title={
+          <span className="text-[15px] font-semibold text-gray-900">
+            Log Out
+          </span>
+        }
+        open={logoutModalOpen}
+        onCancel={() => setLogoutModalOpen(false)}
+        centered
+        footer={[
+          <Button
+            key="cancel"
+            onClick={() => setLogoutModalOpen(false)}
+            className="!rounded-lg !text-[13px] !font-medium !border-gray-200 !text-gray-600 hover:!border-gray-300 hover:!text-gray-800"
+          >
+            Cancel
+          </Button>,
+          <Button
+            key="confirm"
+            type="primary"
+            danger
+            onClick={handleConfirmLogout}
+            className="!rounded-lg !text-[13px] !font-medium"
+          >
+            Yes, Log Out
+          </Button>,
+        ]}
+      >
+        <p className="text-[13px] text-gray-500 py-1">
+          Are you sure you want to log out of your account?
+        </p>
+      </Modal>
     </>
   );
 };

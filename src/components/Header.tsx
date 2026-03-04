@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { CiSearch } from "react-icons/ci";
-import { FaBars, FaXmark } from "react-icons/fa6";
-import Logo from "../../public/images/logo.png";
+import { FaBars, FaRegUser, FaXmark } from "react-icons/fa6";
+import { IoLogInOutline } from "react-icons/io5";
 import { cn } from "../utils/cn";
 import ProfileDropDown from "./drop down/PrfofileDropDown";
 import CartDrawer from "./shopping cart/CartDrawer";
@@ -15,22 +15,25 @@ import { Button, Modal } from "antd";
 import { API_CONFIG } from "../lib/api-config";
 import { getSystemUserByCompanyId } from "../lib/api-services";
 
-const RESELLER_PERMISSION = "RESELLER";
-
 const Header = () => {
-  const { userSession, logout } = useAuth();
+  const { userSession, logout, loading: authLoading } = useAuth();
   const [logoutModalOpen, setLogoutModalOpen] = useState(false);
   const [toggle, setToggle] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [logoSrc, setLogoSrc] = useState<string | null>(null);
+  const [isLogoLoading, setIsLogoLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const router = useRouter();
-
-
+  const isAuthenticated = Boolean(userSession?.accessToken);
 
   const companyId = useMemo(
     () => userSession?.companyId || API_CONFIG.companyId,
     [userSession?.companyId],
   );
+
+  useEffect(() => {
+    setImageLoaded(false);
+  }, [logoSrc]);
 
   useEffect(() => {
     let mounted = true;
@@ -43,6 +46,8 @@ const Header = () => {
         }
       } catch (error) {
         console.error("Failed to load company logo for header:", error);
+      } finally {
+        if (mounted) setIsLogoLoading(false);
       }
     };
     loadLogo();
@@ -63,18 +68,31 @@ const Header = () => {
     <nav className=" bg-white shadow backdrop-blur sticky top-0 z-40 border-b border-gray-200">
       <div className=" max-w-7xl px-5 mx-auto flex items-center justify-between gap-5 py-2">
         <Link href="/" className=" cursor-pointer">
-          <div>
-            {logoSrc ? (
-              <Image src={logoSrc} alt="logo" width={80} height={40} unoptimized />
-            ) : (
-              <Image src={Logo} alt="logo" width={100} />
+          <div className="relative min-w-[80px] min-h-[40px] flex items-center justify-center">
+            {(isLogoLoading || (logoSrc && !imageLoaded)) && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-5 h-5 border-2 border-gray-200 border-t-primary rounded-full animate-spin" />
+              </div>
+            )}
+            {logoSrc && (
+              <Image
+                src={logoSrc}
+                alt="logo"
+                width={80}
+                height={40}
+                unoptimized
+                className={`transition-opacity duration-300 ${
+                  imageLoaded ? "opacity-100" : "opacity-0"
+                }`}
+                onLoad={() => setImageLoaded(true)}
+              />
             )}
           </div>
         </Link>
 
         {/* search by category and products name  */}
 
-        <div className=" rounded-full border-[.1rem] border-primary flex items-center pr-1 sm:pr-2 pl-2">
+        <div className="flex-1 min-w-0 max-w-xl rounded-full border-[.1rem] border-primary flex items-center pr-1 sm:pr-2 pl-2">
           <span className=" text-lg">
             <CiSearch />
           </span>
@@ -116,10 +134,10 @@ const Header = () => {
                 শপ
               </Link>
               <Link
-                href="/order-tracking"
+                href="/flashSell"
                 className=" text-lg font-medium px-3 py-2 hover:text-primary transition-all ease-linear duration-200"
               >
-                অর্ডার ট্র্যাকিং
+                ফ্ল্যাশ সেল
               </Link>
               <Link
                 href="/contact-us"
@@ -128,12 +146,13 @@ const Header = () => {
                 যোগাযোগ
               </Link>
               <Link
-                href="/flashSell"
+                href="/order-tracking"
                 className=" text-lg font-medium px-3 py-2 hover:text-primary transition-all ease-linear duration-200"
               >
-                ফ্ল্যাশ সেল
+                অর্ডার ট্র্যাকিং
               </Link>
-            {/* <Link
+
+              {/* <Link
                 href="/reseller"
                 className=" text-lg font-medium px-3 py-2 hover:text-primary transition-all ease-linear duration-200"
               >
@@ -148,8 +167,29 @@ const Header = () => {
             <div className="md:block hidden">
               <CartDrawer />
             </div>
-            <div className=" md:block hidden cursor-pointer">
-              <ProfileDropDown />
+            <div className="md:block hidden">
+              {authLoading ? (
+                <div className="h-9 w-20 rounded-full border border-gray-200 bg-gray-50" />
+              ) : isAuthenticated ? (
+                <ProfileDropDown />
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/login"
+                    className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:border-gray-400 hover:bg-gray-50 transition-colors duration-200 ease-linear"
+                  >
+                    <IoLogInOutline size={18} />
+                    লগইন
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primaryDark transition-colors duration-200 ease-linear"
+                  >
+                    <FaRegUser size={16} />
+                    রেজিস্টার
+                  </Link>
+                </div>
+              )}
             </div>
             <div
               onClick={() => setToggle(!toggle)}
@@ -176,6 +216,7 @@ const Header = () => {
           >
             হোম
           </Link>
+
           <Link
             onClick={() => setToggle(!toggle)}
             href="/products"
@@ -185,10 +226,10 @@ const Header = () => {
           </Link>
           <Link
             onClick={() => setToggle(!toggle)}
-            href="/order-tracking"
+            href="/flashSell"
             className=" text-lg font-medium px-5 py-2 hover:text-primary transition-all ease-linear duration-200 hover:bg-primary/5"
           >
-            অর্ডার ট্র্যাকিং
+            ফ্ল্যাশ সেল
           </Link>
           <Link
             onClick={() => setToggle(!toggle)}
@@ -199,11 +240,12 @@ const Header = () => {
           </Link>
           <Link
             onClick={() => setToggle(!toggle)}
-            href="/flashSell"
+            href="/order-tracking"
             className=" text-lg font-medium px-5 py-2 hover:text-primary transition-all ease-linear duration-200 hover:bg-primary/5"
           >
-            ফ্ল্যাশ সেল
+            অর্ডার ট্র্যাকিং
           </Link>
+
           {/* <Link
             onClick={() => setToggle(!toggle)}
             href="/reseller"
@@ -211,7 +253,25 @@ const Header = () => {
           >
             রিসেলার
           </Link> */}
-          {userSession && (
+          {!authLoading && !isAuthenticated && (
+            <>
+              <Link
+                onClick={() => setToggle(!toggle)}
+                href="/login"
+                className=" text-lg font-medium px-5 py-2 hover:text-primary transition-all ease-linear duration-200 hover:bg-primary/5"
+              >
+                লগইন
+              </Link>
+              <Link
+                onClick={() => setToggle(!toggle)}
+                href="/register"
+                className=" text-lg font-medium px-5 py-2 hover:text-primary transition-all ease-linear duration-200 hover:bg-primary/5"
+              >
+                রেজিস্টার
+              </Link>
+            </>
+          )}
+          {isAuthenticated && (
             <>
               <Link
                 onClick={() => setToggle(!toggle)}

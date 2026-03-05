@@ -87,11 +87,11 @@ const CompleteSignupClient = () => {
           <p>
             {orderIdFromQuery ? (
               <span>
-                Your order #{orderIdFromQuery} has been created successfully. Please create a password to go to your dashboard. Thank you — happy shopping!
+                আপনার অর্ডার #{orderIdFromQuery} সফলভাবে তৈরি হয়েছে। ড্যাশবোর্ডে যেতে একটি পাসওয়ার্ড তৈরি করুন। ধন্যবাদ — শুভ কেনাকাটা!
               </span>
             ) : (
               <span>
-                Your order has been created successfully. Please create a password to go to your dashboard. Thank you — happy shopping!
+                আপনার অর্ডার সফলভাবে তৈরি হয়েছে। ড্যাশবোর্ডে যেতে একটি পাসওয়ার্ড তৈরি করুন। ধন্যবাদ — শুভ কেনাকাটা!
               </span>
             )}
           </p>

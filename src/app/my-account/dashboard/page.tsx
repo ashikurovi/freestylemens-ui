@@ -10,7 +10,6 @@ import {
   FiPackage,
   FiMap,
   FiStar,
-  FiShoppingBag,
   FiLock,
   FiCheckCircle,
   FiXCircle,
@@ -612,131 +611,7 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="rounded-2xl border border-gray-100 bg-white/90 shadow-sm px-4 py-4 sm:px-5 sm:py-5 flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="h-9 w-9 rounded-full bg-gray-100 text-gray-700 flex items-center justify-center">
-                <FiShoppingBag size={18} />
-              </span>
-              <div>
-                <h2 className="text-base md:text-lg font-semibold text-gray-900">
-                  Quick actions
-                </h2>
-                <p className="text-xs text-gray-500">
-                  Jump to what you need in one tap.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid gap-2">
-            <Link
-              href="/my-account/orders"
-              className="group flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 hover:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <span className="h-10 w-10 rounded-2xl bg-emerald-50 text-gray-700 flex items-center justify-center">
-                  <FiPackage />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    My orders
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Track status & manage cancellations
-                  </p>
-                </div>
-              </div>
-              <span className="text-xs font-semibold text-gray-700">
-                {orderStats.total}
-              </span>
-            </Link>
-
-            <Link
-              href="/my-account/address"
-              className="group flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 hover:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <span className="h-10 w-10 rounded-2xl bg-emerald-50 text-gray-700 flex items-center justify-center">
-                  <FiMapPin />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Saved address
-                  </p>
-                  <p className="text-xs text-gray-500">Update delivery details</p>
-                </div>
-              </div>
-              <span className="text-xs font-semibold text-gray-500">
-                {profileCompletion.address ? "Set" : "Missing"}
-              </span>
-            </Link>
-
-            <Link
-              href="/my-account/reviews"
-              className="group flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 hover:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <span className="h-10 w-10 rounded-2xl bg-emerald-50 text-gray-700 flex items-center justify-center">
-                  <FiStar />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">Reviews</p>
-                  <p className="text-xs text-gray-500">
-                    Rate products you purchased
-                  </p>
-                </div>
-              </div>
-              <span className="text-gray-400">
-                <FiStar />
-              </span>
-            </Link>
-
-            <Link
-              href="/order-tracking"
-              className="group flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 hover:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <span className="h-10 w-10 rounded-2xl bg-emerald-50 text-gray-700 flex items-center justify-center">
-                  <FiTruck />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Order tracking
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Track with a tracking ID
-                  </p>
-                </div>
-              </div>
-              <span className="text-gray-400">
-                <FiTruck />
-              </span>
-            </Link>
-
-            <Link
-              href="/products"
-              className="group flex items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-gray-50/60 px-4 py-3 hover:bg-gray-50"
-            >
-              <div className="flex items-center gap-3">
-                <span className="h-10 w-10 rounded-2xl bg-white text-gray-700 flex items-center justify-center border border-gray-200">
-                  <FiShoppingBag />
-                </span>
-                <div>
-                  <p className="text-sm font-semibold text-gray-900">
-                    Continue shopping
-                  </p>
-                  <p className="text-xs text-gray-600">
-                    Explore new products and deals
-                  </p>
-                </div>
-              </div>
-              <span className="text-xs font-semibold text-gray-700">
-                Shop
-              </span>
-            </Link>
-          </div>
-        </div>
+        {/* Quick actions section removed as requested */}
       </div>
     </div>
   );

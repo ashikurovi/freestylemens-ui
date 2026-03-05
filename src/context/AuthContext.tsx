@@ -175,6 +175,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     clearStoredAuth();
     setUserSession(null);
+    if (typeof window !== "undefined") {
+      window.location.assign("/");
+    }
   };
 
   return (

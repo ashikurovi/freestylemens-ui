@@ -28,24 +28,24 @@ const CountDown = ({ initialSecondsLeft }: CountDownProps) => {
   const { hours, minutes, seconds } = formatTime(timeLeft);
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-3">
       <div className="flex flex-col items-center gap-1">
-        <div className="bg-white w-full text-center rounded text-primary font-medium">
-          {hours}
+        <div className="bg-white shadow-sm border border-gray-200 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg text-gray-900 font-bold sm:text-lg text-base">
+          {hours < 10 ? `0${hours}` : hours}
         </div>
-        <p className="text-white sm:text-sm text-xs">Hours</p>
+        <p className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">Hours</p>
       </div>
       <div className="flex flex-col items-center gap-1">
-        <div className="bg-white w-full text-center rounded text-primary font-medium">
-          {minutes}
+        <div className="bg-white shadow-sm border border-gray-200 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg text-gray-900 font-bold sm:text-lg text-base">
+          {minutes < 10 ? `0${minutes}` : minutes}
         </div>
-        <p className="text-white sm:text-base text-xs">Minutes</p>
+        <p className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">Mins</p>
       </div>
       <div className="flex flex-col items-center gap-1">
-        <div className="bg-white w-full text-center rounded text-primary font-medium">
-          {seconds}
+        <div className="bg-white shadow-sm border border-gray-200 w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-lg text-red-500 font-bold sm:text-lg text-base">
+          {seconds < 10 ? `0${seconds}` : seconds}
         </div>
-        <p className="text-white sm:text-sm text-xs">Seconds</p>
+        <p className="text-gray-500 text-[10px] uppercase font-bold tracking-wider">Secs</p>
       </div>
     </div>
   );

@@ -22,50 +22,57 @@ const MobileTabs = () => {
   };
 
   return (
-    <nav className="md:hidden">
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+    <nav className="md:hidden sticky top-16 z-30 bg-white/80 backdrop-blur-md border-b border-gray-100 -mx-5 px-5 py-3 mb-6">
+      <div className="grid grid-cols-3 gap-2">
         {menuItems.map((item) => (
           <Link
             key={item.id}
             href={`/my-account/${item.link}`}
             className={cn(
-              "flex items-center gap-1.5 whitespace-nowrap px-3 py-2 rounded-full text-xs font-medium border transition-colors",
+              "flex flex-col items-center justify-center gap-1.5 px-2 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 text-center h-full",
               path === item.link
-                ? "bg-primary text-white border-primary shadow-sm"
-                : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                ? "bg-black text-white shadow-md"
+                : "bg-gray-50 text-gray-600 hover:bg-gray-100 border border-gray-100"
             )}
           >
-            <span className="flex items-center justify-center">
+            <span className="text-xl">
               {item.icon}
             </span>
-            <span>{item.name}</span>
+            <span className="truncate w-full">{item.name}</span>
           </Link>
         ))}
-      </div>
-      <div className="mt-3 flex justify-end">
+        
         <button
           type="button"
           onClick={() => setLogoutModalOpen(true)}
-          className="inline-flex items-center gap-2 rounded-full border border-gray-300 bg-gray-100 px-4 py-2 text-xs font-medium text-gray-700 hover:bg-gray-200 transition-colors"
+          className="flex flex-col items-center justify-center gap-1.5 px-2 py-2.5 rounded-xl text-xs font-medium bg-red-50 text-red-600 hover:bg-red-100 transition-all border border-red-100 h-full"
         >
-          <MdLogout size={16} />
-          লগআউট
+          <MdLogout size={20} />
+          <span>লগআউট</span>
         </button>
       </div>
+
       <Modal
         title="লগআউট"
         open={logoutModalOpen}
         onCancel={() => setLogoutModalOpen(false)}
+        centered
         footer={[
-          <Button key="cancel" onClick={() => setLogoutModalOpen(false)}>
+          <Button key="cancel" onClick={() => setLogoutModalOpen(false)} className="rounded-full">
             বাতিল
           </Button>,
-          <Button key="confirm" type="primary" danger onClick={handleConfirmLogout}>
+          <Button 
+            key="confirm" 
+            type="primary" 
+            danger 
+            onClick={handleConfirmLogout}
+            className="rounded-full bg-red-600"
+          >
             হ্যাঁ, লগআউট
           </Button>,
         ]}
       >
-        <p>আপনি কি নিশ্চিত লগআউট করতে চান?</p>
+        <p className="py-4 text-gray-600">আপনি কি নিশ্চিত যে আপনি আপনার অ্যাকাউন্ট থেকে লগআউট করতে চান?</p>
       </Modal>
     </nav>
   );

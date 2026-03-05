@@ -16,7 +16,7 @@ const Dashboardlayout = ({
           <div className="md:pt-2 hidden md:block">
             <SideBar />
           </div>
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm px-4 py-4 md:px-6 md:py-6 lg:px-7 lg:py-7">
+          <div className="w-full">
             {children}
           </div>
         </div>

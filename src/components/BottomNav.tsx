@@ -6,7 +6,7 @@ import { FaRegUser } from "react-icons/fa6";
 import { GoHome } from "react-icons/go";
 import { TbCategoryPlus } from "react-icons/tb";
 import { IoFlash } from "react-icons/io5";
-import { MdOutlineContactSupport } from "react-icons/md";
+import { MdOutlineLocalShipping } from "react-icons/md";
 import CartDrawer from "./shopping cart/CartDrawer";
 
 const BottomNav = () => {
@@ -72,19 +72,19 @@ const BottomNav = () => {
           <span className={premiumLabel}>কার্ট</span>
         </div> */}
 
-        {/* Contact */}
+        {/* Order Tracking */}
         <Link
-          href="/contact-us"
+          href="/order-tracking"
           className={`${itemBase} ${
-            isActive("/contact-us")
+            isActive("/order-tracking")
               ? "text-primary"
               : "text-gray-700 hover:text-primary"
           }`}
         >
           <span className={iconBase}>
-            <MdOutlineContactSupport />
+            <MdOutlineLocalShipping />
           </span>
-          <span className={premiumLabel}>যোগাযোগ</span>
+          <span className={premiumLabel}>অর্ডার ট্র্যাকিং</span>
         </Link>
 
         {/* Account */}

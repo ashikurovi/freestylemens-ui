@@ -10,7 +10,7 @@ import {
 } from "../../../lib/api-services";
 import type { Category } from "@/types/category";
 import { Rate } from "antd";
-import { FiMessageCircle, FiStar } from "react-icons/fi";
+import { FiChevronDown, FiMessageCircle, FiStar } from "react-icons/fi";
 
 interface Review {
   id: number;
@@ -188,65 +188,82 @@ export default function Reviews() {
           </span>
           <span>রিভিউ লিখুন</span>
         </h3>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              ক্যাটাগরি/সেক্টর অনুযায়ী ফিল্টার
-            </label>
-            <select
-              value={selectedCategory}
-              onChange={(e) => {
-                setSelectedCategory(e.target.value);
-                setSelectedProduct(null);
-                setShowForm(false);
-              }}
-              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="">একটি ক্যাটাগরি নির্বাচন করুন</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.name}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {selectedCategory && products.length > 0 ? (
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                পণ্য নির্বাচন করুন
+                ক্যাটাগরি/সেক্টর অনুযায়ী ফিল্টার
               </label>
-              <select
-                value={selectedProduct || ""}
-                onChange={(e) => handleProductSelect(Number(e.target.value))}
-                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-              >
-                <option value="">একটি পণ্য নির্বাচন করুন</option>
-                {products.map((product) => (
-                  <option key={product.id} value={product.id}>
-                    {product.name}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setSelectedProduct(null);
+                    setShowForm(false);
+                  }}
+                  className="w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-3 pr-10 text-sm text-gray-900 shadow-sm outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
+                >
+                  <option value="">একটি ক্যাটাগরি নির্বাচন করুন</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+                <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                  <FiChevronDown size={18} />
+                </span>
+              </div>
             </div>
-          ) : (
-            <div className="opacity-60">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                পণ্য নির্বাচন করুন
-              </label>
-              <select
-                disabled
-                className="w-full p-3 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
-              >
-                <option value="">একটি পণ্য নির্বাচন করুন</option>
-              </select>
-            </div>
-          )}
 
-          
+            {selectedCategory && products.length > 0 ? (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  পণ্য নির্বাচন করুন
+                </label>
+                <div className="relative">
+                  <select
+                    value={selectedProduct || ""}
+                    onChange={(e) =>
+                      handleProductSelect(Number(e.target.value))
+                    }
+                    className="w-full appearance-none rounded-xl border border-gray-200 bg-white px-4 py-3 pr-10 text-sm text-gray-900 shadow-sm outline-none transition focus:border-primary/60 focus:ring-2 focus:ring-primary/20"
+                  >
+                    <option value="">একটি পণ্য নির্বাচন করুন</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.name}
+                      </option>
+                    ))}
+                  </select>
+                  <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                    <FiChevronDown size={18} />
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="opacity-60">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  পণ্য নির্বাচন করুন
+                </label>
+                <div className="relative">
+                  <select
+                    disabled
+                    className="w-full appearance-none rounded-xl border border-gray-200 bg-gray-100 px-4 py-3 pr-10 text-sm text-gray-700 shadow-sm cursor-not-allowed"
+                  >
+                    <option value="">একটি পণ্য নির্বাচন করুন</option>
+                  </select>
+                  <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+                    <FiChevronDown size={18} />
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
 
           {showForm && selectedProduct && (
-            <form onSubmit={handleSubmitReview} className="mt-4 space-y-4">
+            <form onSubmit={handleSubmitReview} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   রেটিং
@@ -307,9 +324,7 @@ export default function Reviews() {
           <span>আমার রিভিউ</span>
         </h3>
         {reviews.length === 0 ? (
-          <p className="text-gray-600 text-sm">
-            আপনি এখনও কোনো রিভিউ লিখেননি।
-          </p>
+          <p className="text-gray-600 text-sm">আপনি এখনও কোনো রিভিউ লিখেননি।</p>
         ) : (
           <div className="space-y-4">
             {reviews.map((review) => (

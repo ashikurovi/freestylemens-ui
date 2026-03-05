@@ -78,30 +78,44 @@ function mapProductToComponentFormat(
 
   // Calculate discount percentage based on effective discount price
   const off =
-    effectiveDiscountPrice && apiProduct.price && effectiveDiscountPrice < apiProduct.price
-      ? Math.round(((apiProduct.price - effectiveDiscountPrice) / apiProduct.price) * 100)
+    effectiveDiscountPrice &&
+    apiProduct.price &&
+    effectiveDiscountPrice < apiProduct.price
+      ? Math.round(
+          ((apiProduct.price - effectiveDiscountPrice) / apiProduct.price) *
+            100,
+        )
       : 0;
 
   // Map images
-  const images: ImageProps[] = apiProduct.images?.map((img: { url: string; alt?: string }, index: number) => ({
-    name: img.alt || `Image ${index + 1}`,
-    url: img.url,
-  })) || [];
+  const images: ImageProps[] =
+    apiProduct.images?.map(
+      (img: { url: string; alt?: string }, index: number) => ({
+        name: img.alt || `Image ${index + 1}`,
+        url: img.url,
+      }),
+    ) || [];
 
   // Create a single variant from the product price
-  const variant: VariantProps[] = [{
-    id: apiProduct.id.toString(),
-    price: Number(apiProduct.price),
-    size: "Default",
-    available_quantity: 100, // Default value - would need to come from inventory if available
-    stock_status: apiProduct.isActive ? "in_stock" : "out_of_stock",
-  }];
+  const variant: VariantProps[] = [
+    {
+      id: apiProduct.id.toString(),
+      price: Number(apiProduct.price),
+      size: "Default",
+      available_quantity: 100, // Default value - would need to come from inventory if available
+      stock_status: apiProduct.isActive ? "in_stock" : "out_of_stock",
+    },
+  ];
 
   // Map category to categories array
-  const categories: CategoryProps[] = apiProduct.category ? [{
-    name: apiProduct.category.name,
-    slug: apiProduct.category.slug,
-  }] : [];
+  const categories: CategoryProps[] = apiProduct.category
+    ? [
+        {
+          name: apiProduct.category.name,
+          slug: apiProduct.category.slug,
+        },
+      ]
+    : [];
 
   // Map description
   const description: DescriptionProps = {
@@ -191,7 +205,7 @@ const Product = async ({ params }: { params: Promise<{ id: string }> }) => {
     notFound();
   }
 
-   return (
+  return (
     <Suspense
       fallback={
         <div className="min-h-[300px] flex items-center justify-center">
@@ -225,7 +239,10 @@ const Product = async ({ params }: { params: Promise<{ id: string }> }) => {
               id="return-policy"
               className="rounded-2xl border border-gray-200 bg-white/90 sm:p-5 p-3 mt-2 overflow-hidden"
             >
-              <Tab product={product} returnPolicyContent={returnPolicyContent} />
+              <Tab
+                product={product}
+                returnPolicyContent={returnPolicyContent}
+              />
             </div>
 
             {/* related products */}

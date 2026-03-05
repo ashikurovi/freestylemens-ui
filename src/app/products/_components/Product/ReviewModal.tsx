@@ -63,7 +63,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({ productId, companyId, onSubmi
     <>
       <button
         onClick={showModal}
-        className="max-w-max border border-primary hover:bg-primary hover:text-white transition-all duration-200 ease-linear px-2.5 py-1.5 rounded-full sm:text-sm text-xs"
+        className="max-w-max border border-gray-900 text-gray-900 hover:bg-gray-900 hover:text-white transition-all duration-300 px-6 py-2 rounded-full text-sm font-semibold tracking-wide mt-2"
       >
         রিভিউ লিখুন
       </button>

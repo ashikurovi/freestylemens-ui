@@ -498,7 +498,7 @@ const CheckoutContent = () => {
         payload.customerEmail = email || userSession.user?.email || undefined;
       }
 
-      await createOrder(payload, userSession?.accessToken, companyId);
+      const res = (await createOrder(payload, userSession?.accessToken, companyId)) as any;
 
       toast.success("Order placed successfully");
 
@@ -506,7 +506,15 @@ const CheckoutContent = () => {
         await refetch();
         router.push("/my-account/orders");
       } else {
-        router.push("/");
+        const orderId: number | undefined = res?.order?.id ?? res?.id ?? undefined;
+        const emailToUse = email || userSession?.user?.email || "";
+        if (emailToUse && orderId) {
+          router.push(`/complete-signup?email=${encodeURIComponent(emailToUse)}&orderId=${orderId}`);
+        } else if (emailToUse) {
+          router.push(`/complete-signup?email=${encodeURIComponent(emailToUse)}`);
+        } else {
+          router.push("/");
+        }
       }
     } catch (error) {
       console.error("Order failed", error);

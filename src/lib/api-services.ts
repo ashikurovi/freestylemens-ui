@@ -730,8 +730,37 @@ export async function createOrder(
     );
     const responseData: ApiResponse<unknown> | unknown = response.data;
     return (responseData && typeof responseData === 'object' && 'data' in responseData)
-        ? (responseData as ApiResponse<unknown>).data
+        ? (responseData as ApiResponse<{ order: { id: number }; payment?: unknown }>).data
         : responseData;
+}
+
+/**
+ * For guest accounts created implicitly via checkout, allow them to set an initial password.
+ */
+export async function initialSetPasswordForGuest(params: {
+    email: string;
+    password: string;
+    confirmPassword: string;
+    orderId?: number;
+    companyId?: string;
+}): Promise<{ success: boolean; message: string }> {
+    const companyIdParam = params.companyId || API_CONFIG.companyId;
+    const response = await axios.post<
+        ApiResponse<{ success: boolean; message: string }> | { success: boolean; message: string }
+    >(
+        getApiUrl(`/users/initial-set-password?companyId=${companyIdParam}`),
+        {
+            email: params.email,
+            password: params.password,
+            confirmPassword: params.confirmPassword,
+            orderId: params.orderId,
+        },
+    );
+    const data = response.data as any;
+    if (data && typeof data === "object" && "data" in data) {
+        return (data as ApiResponse<{ success: boolean; message: string }>).data;
+    }
+    return data as { success: boolean; message: string };
 }
 
 /**
@@ -900,4 +929,3 @@ export async function updateSystemUser(
     }
     return data as SystemUser;
 }
-
